@@ -1,6 +1,6 @@
-from abc import abstractproperty
+
 from tkinter.ttk import PanedWindow
-import pieces
+from pieces import *
 import enum 
 
 
@@ -8,7 +8,7 @@ import enum
 
 
 
-
+piece_map = {'r': Rook(False)}
 class bitboard:
     board_letters = ['a','b','c','d','e','f','g','h']
     
@@ -39,7 +39,7 @@ class bitboard:
         self.num_board = bitboard.num_board
 		
     def make_move(self, rank1, file1, rank2, file2):
-        
+    
         temp = self.array_board[rank1][file1]
         self.array_board[rank2][file2] = temp
         self.array_board[rank1][file1] = ' '
@@ -48,12 +48,27 @@ class bitboard:
         self.num_board[(rank1 * 8) + file1] = ' ' 
     def conv_coord(coord):
         return (8 - int(coord[1]), bitboard.board_letters.index(coord[0]))
+    def coord_conv(self, coord):
+        return str(self.board_letters(coord[1])) + str(8 - coord[0])
     def make_coord_move(self, cood):
         initial = bitboard.conv_coord(cood[0:2])
         fin = bitboard.conv_coord(cood[2:4])
         self.make_move(initial[0],initial[1], fin[0], fin[1])
 
-    
+    def legal_moves(self):
+        mv_list = []
+        for i in range(8):
+            for j in range(8):
+                if self.num_board[i][j] == "p":
+                    pass 
+                if self.num_board[i][j] == "r":
+                    pass 
+                if self.num_board[i][j] == "b":
+                    pass 
+                if self.num_board[i][j] == "k":
+                    pass 
+               
+
     def __str__(self):
         print(" ---- ---- ---- ---- ---- ---- ---- ----")
         
