@@ -37,7 +37,7 @@ class bitboard:
     def __init__(self):
         self.array_board = bitboard.array_board
         self.num_board = bitboard.num_board
-		
+        
     def make_move(self, rank1, file1, rank2, file2):
     
         temp = self.array_board[rank1][file1]
@@ -56,13 +56,29 @@ class bitboard:
         self.make_move(initial[0],initial[1], fin[0], fin[1])
 
     def legal_moves(self):
+        straight_check = [(1, 0,), (-1, 0), (0, 1), (0, -1)]
+        diag_check = [(1, 1), (-1, 1), (1, -1), (-1, -1)]
         mv_list = []
         for i in range(8):
-            for j in range(8):
+            for j in range(8): 
                 if self.num_board[i][j] == "p":
-                    pass 
+                    if self.num_board[i+1][j] == " ":
+                        if i == 1:
+                            if self.num_board[i+2][j] == " ":
+                                mv_list.append((i+2, j))
+                        mv_list.append(i+1, j)
+
                 if self.num_board[i][j] == "r":
-                    pass 
+                    for ch in straight_check:
+                        tmp_check = ch
+                        loop = True
+                        while loop:
+                            if i+ch[0] < 0 or j+ch[1] > 7: 
+                                if self.num_board([i+ch[0],j+ch[1]]) == " ":
+                                    i += ch[0]
+                                    j += ch[1] 
+                            else:
+                                loop = False 
                 if self.num_board[i][j] == "b":
                     pass 
                 if self.num_board[i][j] == "k":
@@ -81,25 +97,26 @@ class bitboard:
             print(" ---- ---- ---- ---- ---- ---- ---- ----")
         return ""
 class Game:
-	
-	def __init__(self) -> None:
-		self.move = 0
-		self.PLAYERS = 1
-		self.board = bitboard()
-		self.GAME_ON = True
-		self.whiteMove = True
-		
+    
+    def __init__(self) -> None:
+        self.move = 0
+        self.PLAYERS = 1
+        self.board = bitboard()
+        self.GAME_ON = True
+        self.whiteMove = True
+        
 
-	def game_loop(self):
-		
-		while(self.GAME_ON):
-			pass 
-	def isInCheck(self):
-		pass
-	def getLegalMoves(self):
-		pass 
 
-	
+    def game_loop(self):
+        
+        while(self.GAME_ON):
+            pass 
+    def isInCheck(self):
+        pass
+    def getLegalMoves(self):
+        pass 
+
+    
 
 def main():
     bitshit = bitboard()
