@@ -1,62 +1,88 @@
 
-from tkinter.ttk import PanedWindow
-from pieces import *
+
 import enum 
 
+class Square:
+    def __init__(self, num: int, piece: str, iswhite: bool):
+        self.num = num
+        self.piece = piece
+        self.iswhite = iswhite
 
 
 
-
-
-piece_map = {'r': Rook(False)}
-class bitboard:
+class Board:
     board_letters = ['a','b','c','d','e','f','g','h']
+    WHITE_PIECES = {"R", "N", "B", "Q", "K"}
+
+    BLACK_PIECES = {"r", "n", "b", "q", "k"}
+    knight_moves = [31, 33, 18, 14, -31, -33, -18, -14]
+    king_moves = {15,16,17,1,-1, -17, -16, -15}
+    board_real = [i for i in range(64)]
+    board_full = [i for i in range(128) if ((i % 16) < 8)]
+
+    real_to_full = {k: v for k, v in zip(board_real, board_full)}
+    rev_dock = {v: k for k, v in zip(board_real, board_full)}
+
+
     
     array_board = [
                     
-                    ['\u2656','\u2658','\u2657','\u2655','\u2654','\u2657','\u2658','\u2656'],                    
-                    ['\u2659','\u2659','\u2659','\u2659','\u2659','\u2659','\u2659','\u2659'],
-                    [' ',' ',' ',' ',' ',' ',' ',' '],
-                    [' ',' ',' ',' ',' ',' ',' ',' '],
-                    [' ',' ',' ',' ',' ',' ',' ',' '],
-                    [' ',' ',' ',' ',' ',' ',' ',' '],
+                    ['\u265c','\u265e','\u265d','\u265b','\u265a','\u265d','\u265e','\u265c'],
                     ['\u265f','\u265f','\u265f','\u265f','\u265f','\u265f','\u265f','\u265f'],
-                    ['\u265c','\u265e','\u265d','\u265b','\u265a','\u265d','\u265e','\u265c']
-                    ]
+                    [' ',' ',' ',' ',' ',' ',' ',' '],
+                    [' ',' ',' ',' ',' ',' ',' ',' '],
+                    [' ',' ',' ',' ',' ',' ',' ',' '],
+                    [' ',' ',' ',' ',' ',' ',' ',' '],
+                    ['\u2659','\u2659','\u2659','\u2659','\u2659','\u2659','\u2659','\u2659'],
+                    ['\u2656','\u2658','\u2657','\u2655','\u2654','\u2657','\u2658','\u2656'],                    
+                ]
     num_board = [
-                    'r','n','b','q','k','b','n','r',
-                    'p','p','p','p','p','p','p','p',
-                    ' ',' ',' ',' ',' ',' ',' ',' ',
-                    ' ',' ',' ',' ',' ',' ',' ',' ',
-                    ' ',' ',' ',' ',' ',' ',' ',' ',
-                    ' ',' ',' ',' ',' ',' ',' ',' ',
+                    'R','N','B','Q','K','B','N','R',
                     'P','P','P','P','P','P','P','P',
-                    'R','N','B','Q','K','B','N','R'
+                    ' ',' ',' ',' ',' ',' ',' ',' ',
+                    ' ',' ',' ',' ',' ',' ',' ',' ',
+                    ' ',' ',' ',' ',' ',' ',' ',' ',
+                    ' ',' ',' ',' ',' ',' ',' ',' ',
+                    'p','p','p','p','p','p','p','p',
+                    'r','n','b','q','k','b','n','r',
                     ]
     
     def __init__(self):
-        self.array_board = bitboard.array_board
-        self.num_board = bitboard.num_board
+        self.array_board = Board.array_board
+        self.num_board = Board.num_board
         
     def make_move(self, rank1, file1, rank2, file2):
     
         temp = self.array_board[rank1][file1]
+
+        temp_num = (rank1 * 8) + file1
+
         self.array_board[rank2][file2] = temp
         self.array_board[rank1][file1] = ' '
         temp_2 = self.num_board[(rank1 * 8) + file1]
         self.num_board[(rank2 * 8) + file2] = temp_2
         self.num_board[(rank1 * 8) + file1] = ' ' 
     def conv_coord(coord):
-        return (8 - int(coord[1]), bitboard.board_letters.index(coord[0]))
+        return (int(coord[1]) - 1, Board.board_letters.index(coord[0]))
     def coord_conv(self, coord):
         return str(self.board_letters(coord[1])) + str(8 - coord[0])
     def make_coord_move(self, cood):
-        initial = bitboard.conv_coord(cood[0:2])
-        fin = bitboard.conv_coord(cood[2:4])
+        initial = Board.conv_coord(cood[0:2])
+        fin = Board.conv_coord(cood[2:4])
         self.make_move(initial[0],initial[1], fin[0], fin[1])
+    def is_avail(self, sq_start_num, sq_dest_num):
+        sq_start_piece, sq_dest_piece = self.num_board[sq_start_num], self.num_board[sq_dest_num]
+        if ((sq_start_piece in self.WHITE_PIECES) ^ (sq_dest_piece in self.WHITE_PIECES)):
+            return True
+        
+    def legal_moves(self, sq_start_num, sq_dest_num):
+        sq_start_piece = self.num_board[sq_start_num]
+        sq_start_ext_num = self.real_to_full[sq_start_num]
 
-    def legal_moves(self):
-        straight_check = [(1, 0,), (-1, 0), (0, 1), (0, -1)]
+        if (sq_start_piece.lower() == "k"):
+            pass
+
+        """ straight_check = [(1, 0,), (-1, 0), (0, 1), (0, -1)]
         diag_check = [(1, 1), (-1, 1), (1, -1), (-1, -1)]
         mv_list = []
         for i in range(8):
@@ -83,12 +109,13 @@ class bitboard:
                     pass 
                 if self.num_board[i][j] == "k":
                     pass 
-               
+                """
 
     def __str__(self):
         print(" ---- ---- ---- ---- ---- ---- ---- ----")
-        
-        for i in self.array_board:
+        tmp_arr = self.array_board.copy()
+        tmp_arr.reverse()
+        for i in tmp_arr:
             for n, j in enumerate(i):
                 if n == 0:
                     print("| ",end="")
@@ -96,12 +123,13 @@ class bitboard:
             print()
             print(" ---- ---- ---- ---- ---- ---- ---- ----")
         return ""
+
 class Game:
     
     def __init__(self) -> None:
         self.move = 0
         self.PLAYERS = 1
-        self.board = bitboard()
+        self.board = Board()
         self.GAME_ON = True
         self.whiteMove = True
         
@@ -117,9 +145,11 @@ class Game:
         pass 
 
     
-
+def foo(shit):
+    return shit.reverse()
+    
 def main():
-    bitshit = bitboard()
+    bitshit = Board()
     print(bitshit)
     inp = input("Coords: ")
     while inp.lower() != "quit" and inp.lower() != "exit":

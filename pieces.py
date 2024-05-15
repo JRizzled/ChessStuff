@@ -1,13 +1,22 @@
+import enum 
+import collections 
+from typing import *
 
 
 
+class Color(enum.Flag):
+	WHITE = enum.auto()
+	BLACK = enum.auto()
+
+WHITE = Color.WHITE
+BLACK = Color.BLACK
 
 class Piece:
-	def __init__(self, w = True):
-		self.isAttacking = []
-		self.isAttackedBy = []
+	def __init__(self, sd = WHITE):
+		self.isAttacking: list[Piece] = []
+		self.isAttackedBy: list[Piece] = []
 		self.coord = []
-		self.WHITE = w 
+		self.Side: Color =  sd
 	def get_moves():
 		pass
 
@@ -39,3 +48,4 @@ class King(Piece):
 	def __init__(self, w = True) -> None:
 		Piece.__init__(self, w)
 
+pieceDict = {""}
