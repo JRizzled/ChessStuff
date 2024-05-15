@@ -12,7 +12,7 @@ WHITE = Color.WHITE
 BLACK = Color.BLACK
 
 class Piece:
-	def __init__(self, sd = WHITE):
+	def __init__(self, sd: Color = WHITE):
 		self.isAttacking: list[Piece] = []
 		self.isAttackedBy: list[Piece] = []
 		self.coord = []
