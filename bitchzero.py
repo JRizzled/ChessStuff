@@ -1,22 +1,29 @@
 
 
 import enum 
+from dataclasses import dataclass
+from typing import *
+from pieces import Piece, cord
 
+
+
+@dataclass
 class Square:
-    def __init__(self, num: int, piece: str, iswhite: bool):
-        self.num = num
-        self.piece = piece
-        self.iswhite = iswhite
+    def __init__(self, coord: cord, piece: Piece):
+        self.co: cord = coord
+        self.piece: Piece = piece
+
 
 
 
 class Board:
+
+    
     board_letters = ['a','b','c','d','e','f','g','h']
     WHITE_PIECES = {"R", "N", "B", "Q", "K"}
 
     BLACK_PIECES = {"r", "n", "b", "q", "k"}
-    knight_moves = [31, 33, 18, 14, -31, -33, -18, -14]
-    king_moves = {15,16,17,1,-1, -17, -16, -15}
+
     board_real = [i for i in range(64)]
     board_full = [i for i in range(128) if ((i % 16) < 8)]
 
@@ -27,15 +34,7 @@ class Board:
     
     array_board = [
                     
-                    ['\u265c','\u265e','\u265d','\u265b','\u265a','\u265d','\u265e','\u265c'],
-                    ['\u265f','\u265f','\u265f','\u265f','\u265f','\u265f','\u265f','\u265f'],
-                    [' ',' ',' ',' ',' ',' ',' ',' '],
-                    [' ',' ',' ',' ',' ',' ',' ',' '],
-                    [' ',' ',' ',' ',' ',' ',' ',' '],
-                    [' ',' ',' ',' ',' ',' ',' ',' '],
-                    ['\u2659','\u2659','\u2659','\u2659','\u2659','\u2659','\u2659','\u2659'],
-                    ['\u2656','\u2658','\u2657','\u2655','\u2654','\u2657','\u2658','\u2656'],                    
-                ]
+  w
     num_board = [
                     'R','N','B','Q','K','B','N','R',
                     'P','P','P','P','P','P','P','P',
