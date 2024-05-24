@@ -1,20 +1,20 @@
 #numpy/numpy/_core/src/multiarray/arrayobject.c
 
 from __future__ import annotations
-
 import numpy as np
 import enum 
 from collections import namedtuple
 from typing import *
 import sys
 
+
 try:
 	from mBoard import Board
 except Exception as e:
 	print("RetardError:",e)
 
-class Coord(np.ndarray):
-	pass
+Cord = lambda x, y : np.array([x,y]) if 0 <= x <= 7 and 0 <= y <= 7 else None
+
 
 class cord(NamedTuple):
 	y: int
