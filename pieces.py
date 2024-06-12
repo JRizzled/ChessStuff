@@ -5,20 +5,23 @@ import numpy as np
 import enum 
 from collections import namedtuple
 from typing import *
+from dataclasses import dataclass
 import sys
 
 
 try:
 	from mBoard import Board
 except Exception as e:
-	print("RetardError:",e)
+	pass
+
 
 Cord = lambda x, y : np.array([x,y]) if 0 <= x <= 7 and 0 <= y <= 7 else None
 
 
-class cord(NamedTuple):
-	y: int
-	x: int
+class cord():
+	def __init__(self, y, x) -> None:
+		self.y: int = y
+		self.x: int = x
 
 class Color(enum.Flag):
 	WHITE = enum.auto()
@@ -28,6 +31,14 @@ class Space(enum.Enum):
 	FRIEND = enum.auto()
 	FOE = enum.auto()
 	EMPTY = enum.auto()
+
+@dataclass
+class Move:
+	init_cord: cord 
+	fin_cord: cord
+	capture_move: bool
+	castle_move: bool 
+	
 
 WHITE: Color = Color.WHITE
 BLACK: Color = Color.BLACK
@@ -50,7 +61,7 @@ class Piece:
 		pass
 class Pawn(Piece):
 	#ss = (Side: (second_row, prom_row, mult))
-	ss: dict[Color: tuple[int]] = {WHITE : (6,0, -1), BLACK : (1, 7, 1)}
+	ss: dict[Color: tuple[int]] = {WHITE : (6,0, -2), BLACK : (1, 7, 2)}
 
 	def __init__(self, place: cord, sd = WHITE) -> None:
 		Piece.__init__(self, place, sd)
@@ -60,10 +71,11 @@ class Pawn(Piece):
 		return "\u265f" if self.Side == WHITE else "\u2659"
 
 	def get_moves(self, b: Board):
+		tmp_pos = cord(self.coord.y, self.coord.x)
 		tmp_init = [self.coord.y, self.coord.x]
 		if tmp_init[0] == self.switch[0]:
-			pass
-
+			tmp_new = [tmp_init[0] + self.switch[2], tmp_init[1]]
+			 
 
 
 class King(Piece):
